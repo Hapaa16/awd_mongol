@@ -1,0 +1,27 @@
+{%extends 'admin_base.html' %}
+{%block title%}Gamebox{%endblock%}
+
+<h1>Gamebox</h1>
+{%block content%}
+<div class="card text-center">
+    <div class="card-header">
+      GameBox үүсгэх
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Special title treatment</h5>
+      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <a href="#" id="myBtn"class="btn btn-primary" onclick="test()">Go somewhere</a>
+      <script src="/static/js/admin.js"></script>
+    </div>
+    <!-- popup -->
+    <div id="divCheckbox" style="display: none;">
+      <form action="" method="POST">
+        {% csrf_token %}
+        <label for="boxname">Boxname</label>
+        <input type="text" id="boxname" name="boxname">
+        <input type="submit" value="Create">
+      </form>
+    </div>
+    <!-- popup end -->
+</div>
+{%endblock%}

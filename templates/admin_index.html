@@ -1,0 +1,16 @@
+{% extends 'admin_base.html' %}
+{%block title%}Admin{%endblock%}
+{%block content%}
+    {% if user.is_superuser%}
+    <h1>Hi admin</h1>
+    {%else%}
+    <form action="" method="POST">
+        {%csrf_token%}
+        {{form}}
+        <input type="submit">
+    </form>
+    {%endif%}
+   {% for message in messages %}
+   <p>{{message}}</p>
+{% endfor %}
+{%endblock%}
