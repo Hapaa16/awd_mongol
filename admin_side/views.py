@@ -1,4 +1,5 @@
 from django.contrib.auth import forms
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
@@ -28,11 +29,21 @@ def index(request):
     return render(request, 'admin_index.html', context)
 @user_passes_test(lambda u: u.is_superuser)
 def Gamebox_page(request):
-    context = {}
+    users = User.objects.all
+    context = {'users': users}
     if request.method == "POST":
         game_box_name = request.POST.get('boxname')
-        box_creation = Gamebox(box_name=game_box_name)
-        box_creation.save()
+        box_description = request.POST.get('description')
+        box_ip = request.POST.get('ip')
+        box_ssh_user = request.POST.get('sshname')
+        box_ssh_pw = request.POST.get('sshpw')
+        box_ssh_port =request.POST.get('port')
+        team_id = request.POST.get('team')
+        team = User.objects.all().filter(id=team_id)
+        if not team[0].is_superuser:
+            print(team)
+            box_creation = Gamebox(box_name=game_box_name, ip=box_ip, ssh_user=box_ssh_user, ssh_password=box_ssh_user, ssh_port=box_ssh_port, description=box_description, user=team[0])
+            box_creation.save()
     return render(request, 'gamebox.html', context)
 @user_passes_test(lambda u: u.is_superuser)
 def Flag_page(request):

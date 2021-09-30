@@ -19,9 +19,27 @@
         {% csrf_token %}
         <label for="boxname">Boxname</label>
         <input type="text" id="boxname" name="boxname">
+        <label for="ip">Ip</label>
+        <input type="text" id="ip" name="ip">
+        <label for="desc">Description</label>
+        <input type="text" id="desc" name="description">
+        <label for="sshname">Ssh user</label>
+        <input type="text" id="sshname" name="sshname">
+        <label for="sshpw">Ssh password</label>
+        <input type="text" id="sshpw" name="sshpw">
+        <label for="port">Ssh port</label>
+        <input type="text" id="port" name="port">
+        <select id="cars" name="team">
+          {% for user in users%}
+            {% if not user.is_superuser %}
+            <option value="{{user.id}}">{{user}}</option>
+            {%endif%}
+          {% endfor %}
+        </select>
         <input type="submit" value="Create">
       </form>
     </div>
+
     <!-- popup end -->
 </div>
 {%endblock%}
