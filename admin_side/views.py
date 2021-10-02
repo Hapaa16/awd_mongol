@@ -6,8 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Gamebox, Flag, UserToken
 import secrets
-# Create your views here.
 from django.contrib.auth.decorators import user_passes_test
+from ssh_handle import ssh_handler
 def index(request):
     form = AuthenticationForm()
     if request.method == "POST":
@@ -60,5 +60,14 @@ def flag_generate(request):
     print('flag generate')
     return redirect('flag_uusgelt')
 def game_start(request):
+    all_boxes = Gamebox.objects.all()
+    flag = Flag.objects.all()
+    command = "echo '"+ flag[1].flags+"' > /flag"
+    for box in all_boxes:
+        ssh_handler(box.ip, box.ssh_user, box.ssh_password, command, box.ssh_port)
+        print(box.id)  
     print('GAME STARTED !!!')
     return redirect('flag_uusgelt')
+def prepare_page(request):
+    context={}
+    return render(request, 'game_prepare.html', context)

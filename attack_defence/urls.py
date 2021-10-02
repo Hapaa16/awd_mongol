@@ -19,7 +19,7 @@ from django.conf.urls import static
 from django.urls import path, include
 
 from main.views import index, register, logout_page
-from admin_side.views import index as index_admin, Gamebox_page, Flag_page, flag_generate, game_start
+from admin_side.views import index as index_admin, Gamebox_page, Flag_page, flag_generate, game_start, prepare_page
 urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
@@ -27,6 +27,7 @@ urlpatterns = [
     path('god/', index_admin, name='index_admin'),
     path('god/gamebox/', Gamebox_page, name='gamebox'),
     path('god/register/', register, name='bag_uusgelt'),
+    path('god/prepare/', prepare_page, name='prepare'),
     path('god/flag', Flag_page, name='flag_uusgelt'),
     path('god/flag/flaggen', flag_generate, name='flag_generate'),
     path('god/flag/gamestart', game_start, name='gamestart'),
