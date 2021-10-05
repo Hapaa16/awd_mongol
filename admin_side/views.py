@@ -4,10 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Gamebox, Flag, UserToken
+from .models import Gamebox, Flag, UserToken, Game_settings, Rounds
 import secrets
 from django.contrib.auth.decorators import user_passes_test
 from ssh_handle import ssh_handler
+import datetime
 def index(request):
     form = AuthenticationForm()
     if request.method == "POST":
@@ -52,11 +53,14 @@ def flag_generate(request):
     flag_prefix = "nabactf{"
     flag_suffix = "}"
     first_box =  Gamebox.objects.first()
-    for round in range(3):
+    game_settings = Game_settings.objects.first()
+    many_round = int(game_settings.all_round)
+    for round in range(1, many_round+1):
         flag = flag_prefix+str(secrets.token_hex(16))+flag_suffix
-        flag_to_db = Flag(flags=flag)
-        flag_to_db.box = first_box
+        flag_to_db = Flag(flags=flag, box=first_box)
         flag_to_db.save()
+        a_round = Rounds(round_dugaar=round, flags = flag_to_db)
+        a_round.save()
     print('flag generate')
     return redirect('flag_uusgelt')
 def game_start(request):
@@ -70,4 +74,30 @@ def game_start(request):
     return redirect('flag_uusgelt')
 def prepare_page(request):
     context={}
+    if request.method == "POST":
+        ymd = request.POST.get('yearmonthday')
+        hour_minute = request.POST.get('hourminute')
+        b_year = int(ymd[0:4])
+        b_month = int(ymd[5:7])
+        b_day = int(ymd[8:10])
+        b_hour = int(hour_minute[0:2])
+        b_minute = int(hour_minute[3:])
+        
+        e_ymd = request.POST.get('endymd')
+        e_hour_minute = request.POST.get('endhm')
+        e_year = int(e_ymd[0:4])
+        e_month = int(e_ymd[5:7])
+        e_day = int(e_ymd[8:10])
+        e_hour = int(e_hour_minute[0:2])
+        e_minute = int(e_hour_minute[3:])
+        diff_in_minutes = (e_day - b_day)*24*60+(e_hour - b_hour)*60 + (e_minute - b_minute)
+        
+        round_min = request.POST.get('round')
+        round_min = int(round_min)
+        all_rounds = diff_in_minutes / round_min
+        all_rounds = round(all_rounds)
+        save = Game_settings(all_round = all_rounds)
+        save.save()
+
+        print(all_rounds)
     return render(request, 'game_prepare.html', context)

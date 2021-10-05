@@ -3,11 +3,29 @@
 {%block title %}game prepare{%endblock%}
 
 {%block content%}
+
 <h1>keke</h1>
 <div>
 <form method="POST">
-    <label for="party">Enter a date and time for your party booking:</label>
-    <input id="party" type="datetime-local" name="partydate" value="2017-06-01T08:30">
+    {%csrf_token%}
+        <div>
+            <label for="ymd">Game begin time:</label>
+            <input id="ymd" type="date" name="yearmonthday">
+            <label for="hm">Hour minute</label>
+            <input id="hm" type="text" value="" name="hourminute">
+        </div>
+        <div>
+            <label for="eymd">Game end time:</label>
+            <input id="eymd" type="date" name="endymd">
+            <label for="ehm">Hour minute</label>
+            <input id="ehm" type="text" value="" name="endhm">
+        </div>
+        <div>
+            <label for="round">How many minutes in a round, default: 3min</label>
+            <input id="round" type="text" name="round">
+        </div>
+        <input type="submit">
 </form>
 </div>
+<script src="/static/js/admin.js"></script>
 {%endblock%}

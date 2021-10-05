@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields.related import ForeignKey
 class UserToken(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=100)
@@ -21,6 +22,13 @@ class Flag(models.Model):
     def __str__(self):
         return self.flags
 
+class Game_settings(models.Model):
+    all_round = models.CharField(default=None, null=True, max_length=10)
+    def __str__(self):
+        return self.all_round
     
-
+class Rounds(models.Model):
+    round_dugaar = models.IntegerField(null=True)
+    flags = ForeignKey(Flag, default=None, on_delete=models.CASCADE)
+    
 # Create your models here.
